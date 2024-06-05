@@ -1,6 +1,11 @@
 name = "IonChannels"
-[compat]
-julia = "1.10.1"
-DrWatson = "2.15.0"
+
 [deps]
 DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
+IonChannelTools = "206f3499-585b-47e6-8c83-bef118bac9e9"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+
+[compat]
+DrWatson = "2.15.0"
+julia = "1.10.1"
