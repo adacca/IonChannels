@@ -7,7 +7,7 @@ Compute state distributions according to the transition rate matrix function 'G'
 
 # Arguments
 - `G`: function which takes a parameter argument (from 'L') and returns a square transition rate matrix
-- `L`: list of parameter values to be fed to 'G', controls number of steps to take
+- `L`: list of parameter values to be fed to 'G', (size determines number of steps to take)
 - `dt`: time step
 - `mu0`: initial distribution as a row vector, uses steady state if unspecified
 
@@ -109,8 +109,8 @@ function fxnprotplot(fxn,protocol,t,multi=False,labels=:none)
 
 
 """
+[time in ms over trange alpha in mV] with pulse param [start,end,low,high]
 """
-"[time in ms over trange alpha in mV] with pulse param [start,end,low,high]"
 function pulse(trange,dt,args=[0 5 -100e-3 10e-3]) #square pulse
     t0,t1,y0,y1=args
     t = collect(trange[1]:dt:trange[2])
