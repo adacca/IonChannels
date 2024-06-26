@@ -1,6 +1,6 @@
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.10.1"
+julia_version = "1.10.4"
 manifest_format = "2.0"
 project_hash = "096e5b00771e9cbb80a332b54bdf74e75ab340a3"
 
@@ -80,7 +80,7 @@ weakdeps = ["Dates", "LinearAlgebra"]
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "1.1.0+0"
+version = "1.1.1+0"
 
 [[deps.ConcurrentUtilities]]
 deps = ["Serialization", "Sockets"]
@@ -257,6 +257,7 @@ deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
 [[deps.IonChannelTools]]
+deps = ["LinearAlgebra", "Plots"]
 path = "src/IonChannelTools"
 uuid = "206f3499-585b-47e6-8c83-bef118bac9e9"
 version = "0.1.0"
