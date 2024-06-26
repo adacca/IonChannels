@@ -1,5 +1,3 @@
-module IonChannelTools
-
 using LinearAlgebra, Plots
 
 """
@@ -119,7 +117,8 @@ function pulse(trange,dt,args=[0 5 -100e-3 10e-3]) #square pulse
         end
     return [t a]
     ends
-	
+end
+
 
 """
 the spike from Izhikevich
@@ -200,6 +199,3 @@ function spike(tmax,dt,args="rs",)
 
     return [t v.*1e-3] #returns in mV
     end
-
-end # module IonChannelTools
-end
