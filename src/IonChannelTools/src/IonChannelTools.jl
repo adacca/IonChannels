@@ -2,6 +2,8 @@ module IonChannelTools
 
 using LinearAlgebra, Plots
 
+export spike
+
 """
 	evolvedist(G,L,dt,mu0=steadystate(G,L[1]))
 
