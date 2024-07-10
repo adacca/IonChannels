@@ -120,7 +120,7 @@ function pulse(trange,dt,args=[0 5 -100e-3 10e-3]) #square pulse
             end
         end
     return [t a]
-    ends
+end
 	
 
 """
@@ -140,7 +140,7 @@ function spike(tmax,dt,args="rs",)
         d = 100. #everything in mV and pA
         vpeak = 35. # spike cutoff
         Iin = 80.
-        end
+    end
 
     if args=="rs"
         vr = -60.
@@ -152,7 +152,7 @@ function spike(tmax,dt,args="rs",)
         d = 100. #everything in mV and pA
         vpeak = 35. # spike cutoff
         Iin = 80.
-        end
+    end
 
     if args=="ib"
         vr = -75.
@@ -164,7 +164,7 @@ function spike(tmax,dt,args="rs",)
         a = 0.01
         d = 130.
         Iin = 600.
-        end
+    end
 
     if args=="ch"
         vr = -75.
@@ -176,7 +176,7 @@ function spike(tmax,dt,args="rs",)
         a = 0.01
         d = 130.
         Iin = 600.
-        end
+    end
 
     T = tmax #max time (from 0) in ms
     tau = dt # step in ms
@@ -196,12 +196,11 @@ function spike(tmax,dt,args="rs",)
             v[i] = vpeak # padding the spike amplitude
             v[i+1] = c # membrane voltage reset
             u[i+1] += d # recovery variable update
-            end
         end
+    end
     #plot(tau*(1:n), v) # plot the result
 
     return [t v.*1e-3] #returns in mV
-    end
+end
 
 end # module IonChannelTools
-end
