@@ -1,19 +1,20 @@
 using DrWatson
 @quickactivate "IonChannels"
 
-include(srcdir("ICTools.jl"))
+using IonChannelTools
+#include(srcdir("ICTools.jl"))
 include(srcdir("Na5.jl"))
 
 dt = 1e-3
 trange = [-2 10]
-tL = spike(200,dt) #spike
-mu0 = steadystate(Gmatrix,tL[1,2])
-Nadist = evolvedist(Gmatrix,tL[:,2],dt)
+tL = IonChannelTools.spike(200,dt) #spike
+mu0 = IonChannelTools.steadystate(Gmatrix,tL[1,2])
+Nadist = IonChannelTools.evolvedist(Gmatrix,tL[:,2],dt)
 
-Naqex = Qex(Nadist,Gmatrix,tL[:,2],dt)
+Naqex = IonChannelTools.Qex(Nadist,Gmatrix,tL[:,2],dt)
 
-#plt1 = fxnprotplot(Nadist,tL[:,2],tL[:,1])
-#plt2 = fxnprotplot(Naqex,tL[:,2],tL[:,1])
+#plt1 = IonChannelTools.fxnprotplot(Nadist,tL[:,2],tL[:,1])
+#plt2 = IonChannelTools.fxnprotplot(Naqex,tL[:,2],tL[:,1])
 
 
 include(srcdir("K5.jl"))
