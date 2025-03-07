@@ -29,8 +29,8 @@ returns:
 a_m,a_h,b_m--tuple, three parameters needed for gna()
 """
 function param(alpha) #returns parameters for na+ model
-    am = ((alpha+40e-3)/10e-3)/(1-exp(-(alpha+40e-3)/10e-3))
-    ah = .07*exp(-(alpha+65e-3)/20e-3)
-    bm = 4*exp(-(alpha+65e-3)/18e-3)
+    am = ((alpha+40)/10)/(1-exp(-(alpha+40)/10))
+    ah = .07*exp(-(alpha+65)/20)
+    bm = 4*exp(-(alpha+65)/18)
     return am,ah,bm
     end

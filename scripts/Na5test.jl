@@ -13,14 +13,15 @@ Nadist = IonChannelTools.evolvedist(Gmatrix,tL[:,2],dt)
 
 Naqex = IonChannelTools.Qex(Nadist,Gmatrix,tL[:,2],dt)
 
-#plt1 = IonChannelTools.fxnprotplot(Nadist,tL[:,2],tL[:,1])
-#plt2 = IonChannelTools.fxnprotplot(Naqex,tL[:,2],tL[:,1])
-
+plt1 = IonChannelTools.fxnprotplot(Nadist,tL[:,2],tL[:,1])
+plt2 = IonChannelTools.fxnprotplot(Naqex,tL[:,2],tL[:,1])
+display(plt1)
+display(plt2)
 
 include(srcdir("K5.jl"))
 
-mu0 = steadystate(Gmatrix,tL[1,2])
-Kdist = evolvedist(Gmatrix,tL[:,2],dt)
-Kqex= Qex(Kdist,Gmatrix,tL[:,2],dt)
+mu0 = IonChannelTools.steadystate(Gmatrix,tL[1,2])
+Kdist = IonChannelTools.evolvedist(Gmatrix,tL[:,2],dt)
+Kqex= IonChannelTools.Qex(Kdist,Gmatrix,tL[:,2],dt)
 
-pt3 = fxnprotplot([Naqex Kqex],tL[:,2],tL[:,1])
+pt3 = IonChannelTools.fxnprotplot([Naqex Kqex],tL[:,2],tL[:,1])
