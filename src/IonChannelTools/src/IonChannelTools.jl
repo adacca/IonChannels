@@ -36,9 +36,12 @@ function evolvedist(G,L,dt,mu0=steadystate(G,L[1]))
 Return steady state distribution for transition rate matrix 'G' with parameter 'alpha'.
 
 'alpha' must be a signle value.
+
+needs to be normalized bc for whatever reason isn't normalized to begin with?? but done now
 """
 function steadystate(G,alpha)
-    return transpose(abs.(LinearAlgebra.nullspace(transpose(G(alpha)))))
+    ss = transpose(abs.(LinearAlgebra.nullspace(transpose(G(alpha)))))
+    return ss/sum(ss) #normalized
     end
 
 
@@ -110,7 +113,7 @@ function fxnprotplot(fxn,protocol,t,multi=false,labels=:none)
 """
 [time in ms over trange alpha in mV] with pulse param [start,end,low,high]
 """
-function pulse(trange,dt,args=[0 5 -100e-3 10e-3]) #square pulse
+function pulse(trange,dt,args=[0 5 -100 10]) #square pulse
     t0,t1,y0,y1=args
     t = collect(trange[1]:dt:trange[2])
     a = fill(y0,length(t))
@@ -200,7 +203,7 @@ function spike(tmax,dt,args="rs",)
     end
     #plot(tau*(1:n), v) # plot the result
 
-    return [t v.*1e-3] #returns in mV
+    return [t v] #returns in mV
 end
 
 end # module IonChannelTools
