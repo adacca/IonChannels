@@ -1,6 +1,6 @@
 module IonChannelTools
 
-using LinearAlgebra, Plots
+using LinearAlgebra, Plots, DataFrames
 
 export spike
 
@@ -33,7 +33,7 @@ function evolvedist(G,L,dt,mu0=steadystate(G,L[1]))
 """
 	steadystate(G,alpha)
 
-Return steady state distribution for transition rate matrix 'G' with parameter 'alpha'.
+Calculate steady state distribution for transition rate matrix 'G' with parameter 'alpha'.
 
 'alpha' must be a signle value.
 
@@ -48,7 +48,7 @@ function steadystate(G,alpha)
 """
 	Qex(dists,G,L,dt)
 
-Calculates excess heat for each step in 'dists'.
+Calculate excess heat for each step in 'dists'.
 
 # Arguments
 - `dists`: array of state distributions (as from evolvedist())
@@ -68,7 +68,7 @@ function Qex(dists,G,L,dt)
 """
 	Wex(dists,G,L,dt)
 
-Calculates excess work for each step in 'dists'.
+Calculate excess work for each step in 'dists'.
 
 # Arguments
 - `dists`: array of state distributions (as from evolvedist())
@@ -84,6 +84,154 @@ function Wex(dists,G,L,dt)
         end
     return wex #array of Wex accumlating over the whole interval
     end
+
+"""
+    H(mu)
+
+Compute Shannon entropy of state distribution mu.
+
+#Arguments
+- `mu`: 1-dim list of single state distribution
+
+NOTE:
+computes using natural logarithm. Must match log base used in Q_ex and W_ex calculations
+missing a factor of kB/2. doesn't matter really.
+"""
+function H(mu)
+    #shannon entropy of state distribution mu, using nat log
+    h = 0
+    for x in mu
+        h-= x*log(x) #using nat log, could change?
+    end
+    return h
+end
+
+"""
+    S_tot(G,dist)
+
+Compute Pal-Gangopadhyay's 'S dot total' total entropy production rate.
+
+#Arguments
+- `G`: transition rate matrix of actual values (not the matrix function)
+- `mu`: single state distribution 
+
+NOTE: equivalent to sum of S_sys + S_med
+"""
+function S_tot(G,mu)
+    S_t = 0
+    len = length(G[1,:]) #side dimension of matrix
+    for i in 1:len
+        for j in 1:len
+            s1 = (G[i,j]*mu[i]-G[j,i]*mu[j])
+            s2 = log(abs((G[i,j]*mu[i])/(G[j,i]*mu[j])))
+            if isnan(s2)
+                s2 = 0
+            end
+            s = s1*s2
+            S_t += s
+        end
+    end
+    return S_t
+end
+
+"""
+    S_med(G,mu)
+
+Compute Pal-Gangopadhyay's 'S dot medium' entropy flux into environment.
+
+#Arguments
+- `G`: transition rate matrix of actual values (not the matrix function)
+- `mu`: single state distribution 
+
+"""
+function S_med(G,mu)
+    S_m = 0
+    len = length(G[1,:]) #side dimension of matrix
+    for i in 1:len
+        for j in 1:len
+            s1 = (G[i,j]*mu[i]-G[j,i]*mu[j])
+            s2 = log(abs((G[i,j])/(G[j,i])))
+            if isnan(s2)
+                s2 = 0
+            end
+            s = s1*s2
+            S_m += s
+        end
+    end
+    return S_m
+end
+
+"""
+    S_sys(G,mu)
+
+Compute Pal-Gangopadhyay's 'S dot system' system entropy production rate.
+
+#Arguments
+- `G`: transition rate matrix of actual values (not the matrix function)
+- `mu`: single state distribution 
+"""
+function S_sys(G,mu)
+    S_s = 0
+    len = length(G[1,:]) #side dimension of matrix
+    for i in 1:len
+        for j in 1:len
+            s1 = (G[i,j]*mu[i]-G[j,i]*mu[j])
+            s2 = log(abs((mu[i])/(mu[j])))
+            if isnan(s2)
+                s2 = 0
+            end
+            s = s1*s2
+            S_s += s
+        end
+    end
+    return S_s
+end
+
+"""
+    S_array(S_x,Gmatrix,L,dists)
+
+Accumulate epr over time for a list of state distributions
+
+#Arguments
+- `S_x`: epr function (S_tot, S_sys, S_med), must take arguments of (transition rate matrix (values), state distribution)
+- `Gmatrix`: transition rate matrix function
+- `L`: list of parameter values (for G matrix). should match length of dists
+- `dists`: array of state distributions
+
+returns epr over time, length of L
+"""
+function S_array(S_x,Gmatrix,L,dists)
+    S = []
+    for i in 1:length(L)
+        append!(S, S_x(Gmatrix(L[i]),dists[i,:]))
+    end
+    return S
+end
+
+"""
+    ddt(x,dt)
+
+Compute first derivative of one-dim list.
+
+#Arguments
+- `x`: one-dim list of values
+- `dt`: time step between values (or equivalent)
+
+NOTE: returns same size as `x`
+"""
+function ddt(x,dt)
+    dx = Array{Float64}(undef,0,1)
+    for i in 1:length(x)
+        if i==1
+            dx = [dx; (x[i+1]-x[i])/(dt)]
+        elseif i==length(x)
+            dx = [dx; (x[i]-x[i-1])/(dt)]
+        else
+            dx = [dx; (x[i+1]-x[i-1])/(2*dt)]
+        end
+    end
+    return dx
+end
 
 
 """
