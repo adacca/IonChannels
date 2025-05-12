@@ -32,6 +32,7 @@ function evolvedist(G,L,dt,mu0=steadystate(G,L[1]))
 
 """
 	steadystate(G,alpha)
+    steadystate(G::Array)
 
 Calculate steady state distribution for transition rate matrix 'G' with parameter 'alpha'.
 
@@ -43,10 +44,15 @@ function steadystate(G,alpha)
     ss = transpose(abs.(LinearAlgebra.nullspace(transpose(G(alpha)))))
     return ss/sum(ss) #normalized
     end
+function steadystate(G)
+    ss = transpose(abs.(LinearAlgebra.nullspace(transpose(G))))
+    return ss/sum(ss) #normalized
+    end
 
 
 """
 	Qex(dists,G,L,dt)
+	Qex(dists,ss,dt)
 
 Calculate excess heat for each step in 'dists'.
 
@@ -54,19 +60,31 @@ Calculate excess heat for each step in 'dists'.
 - `dists`: array of state distributions (as from evolvedist())
 - `G`: transition rate matrix function associated with 'dists'
 - `L`: list of parameter values 'G' associated with 'dists'
+OR
+- `ss`: array of hypothetical steady states corresponding to distributions in dists
 - `dt`: time step
 """
-function Qex(dists,G,L,dt)
+function Qex(dists::Array,G::Function,L::Array,dt::Float64)
     Qex=[0] #starts at 0
     for i= 1:length(L)-1 #for each step
-	newQ = -((transpose(dists[i+1,:]-dists[i,:])*transpose(-log.(steadystate(G,L[i]))))[1]) #defined equation term
+	newQ = -((transpose(dists[i+1,:]-dists[i,:])*transpose(-log.(steadystate(G,L[i]))))[1])
+	#defined equation term
         Qex = [Qex; Qex[end] + newQ] #summation
         end
     return Qex #array of Qex accumulating over the whole interval
     end
-
+function Qex(dists::Array,ss::Array,dt::Float64)
+    Qex=[0] #starts at 0
+    for i= 1:length(ss[:,1])-1 #for each step
+	newQ = -((transpose(dists[i+1,:]-dists[i,:])*(-log.(ss[i,:])))[1])
+	#defined equation term
+        Qex = [Qex; Qex[end] + newQ] #summation
+        end
+    return Qex #array of Qex accumulating over the whole interval
+    end
 """
 	Wex(dists,G,L,dt)
+	Wex(dists,ss,dt)
 
 Calculate excess work for each step in 'dists'.
 
@@ -74,12 +92,22 @@ Calculate excess work for each step in 'dists'.
 - `dists`: array of state distributions (as from evolvedist())
 - `G`: transition rate matrix function associated with 'dists'
 - `L`: list of parameter values 'G' associated with 'dists'
+OR
+- `ss`: array of hypothetical steady states corresponding to distributions in dists
 - `dt`: time step
 """
-function Wex(dists,G,L,dt)
+function Wex(dists::Array,G::Function,L::Array,dt::Float64)
     wex=[0] #starts at 0
     for i= 1:length(L)-1 #for each step
         newW = ((transpose(dists[i,:])*transpose(-log.(steadystate(G,L[i+1]))-(-log.(steadystate(G,L[i])))))[1]) #defined equation term
+	wex = [wex; wex[end] + newW] #summation
+        end
+    return wex #array of Wex accumlating over the whole interval
+    end
+function Wex(dists::Array,ss::Array,dt::Float64)
+    wex=[0] #starts at 0
+    for i= 1:length(L)-1 #for each step
+        newW = ((transpose(dists[i,:])*transpose(-log.(ss[i+1,:])-(-log.([i,:]))))[1]) #defined equation term
 	wex = [wex; wex[end] + newW] #summation
         end
     return wex #array of Wex accumlating over the whole interval
@@ -244,7 +272,7 @@ If 'multi', then each row of 'fxn' will be plotted (each first-dimension element
 haven't tested properly, might not work
 """
 function fxnprotplot(fxn,protocol,t,multi=false,labels=:none)
-    plt = plot()
+    plt = plot(xaxis="Time [ms]")
     if multi
 	for i in 1:size(fxn,1) #each row
 	    plt = plot!(t,fxn[i,:])
@@ -252,14 +280,14 @@ function fxnprotplot(fxn,protocol,t,multi=false,labels=:none)
     else
 	plt = plot!(t,fxn)
 	end
-    plt = plot!(twinx(),t,protocol,linestyle=:dash,seriescolor=:gray,label=:none)
+    plt = plot!(twinx(),t,protocol, yaxis = "Transmembrane Voltage [mV]", linestyle=:dash,seriescolor=:gray,label=:none)
     #plots the driving protocol tL on the same graph (but with a seperate y-axis)
     return plt
     end
 
 
 """
-[time in ms over trange alpha in mV] with pulse param [start,end,low,high]
+[time in ms over trange alpha in mV] with pulse param [high start, high end,low,high]
 """
 function pulse(trange,dt,args=[0 5 -100 10]) #square pulse
     t0,t1,y0,y1=args

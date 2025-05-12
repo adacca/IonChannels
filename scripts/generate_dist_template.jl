@@ -14,7 +14,8 @@ using IonChannelTools
 #    - dt: timestep in ms
 #    - tbound: max or range of time domain
 #    - Largs: additional arguments for protocol function
-#    - protocol: driving function to be called with (tbound,dt,Largs)
+#    - prot_fxn: driving function to be called with (tbound,dt,Largs)
+#    - prot_name: string name for protocal function for file labeling
 # OPTIONAL
 # - directory: destination directory in "/data/", default is "/distributions"
 
@@ -26,8 +27,9 @@ include(srcdir(model*".jl"))
 dt = 1e-3 #timestep in ms
 tbound = ... #t boundary in ms, max value or [start end] as relevant to driving function
 Largs = ... #arguments for protocol function, array or string as relevant
-protocol = IonChannelTools.... #function for calculating protocol, must take input in form (tbound,dt,args)
-tL = protocol(tbound,dt,Largs)
+prot_fxn = IonChannelTools.... #function for calculating protocol, must take input in form (tbound,dt,args)
+prot_name = "spike" #name of protocol as str for file labeling
+tL = prot_fxn(tbound,dt,Largs)
 
 #distributions: actual and steady state (INPUT UNCESESSARY)
 dists = IonChannelTools.evolvedist(Gmatrix,tL[:,2],dt) #distributions over protocol
@@ -38,7 +40,7 @@ end
 
 #saving data (OPT INPUT: destination directory)
 directory = "distributions" #name of destination directory in "/data/"
-d = @strdict model dt tbound Largs protocol tL dists steadystates #save these parameters and values as dict
-name = savename(d, "jld2"; connector = "_", ignores = ["tL" "dists" "steadystates"], sort=false)
-#@tagsave(datadir(directory, name), d; storepatch=true)
+d = @strdict model dt tbound Largs prot_name prot_fxn tL dists steadystates #save these parameters and values as dict
+name = savename(d, "jld2"; connector = "_", ignores = ["prot_fxn" "tL" "dists" "steadystates"], sort=false)
+@tagsave(datadir(directory, name), d; storepatch=true)
 print("Distributions saved to /data/"*directory*"/"*name*"\n")

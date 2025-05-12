@@ -1,0 +1,177 @@
+
+\documentclass[%
+ aip,
+% jmp,
+% bmf,
+% sd,
+% rsi,
+ amsmath,amssymb,
+%preprint,%
+ reprint,%
+%author-year,%
+%author-numerical,%
+% Conference Proceedings
+]{revtex4-1}
+
+\usepackage{graphicx}% Include figure files
+\usepackage{dcolumn}% Align table columns on decimal point
+\usepackage{bm}% bold math
+%\usepackage[mathlines]{lineno}% Enable numbering of text and display math
+%\linenumbers\relax % Commence numbering lines
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+\usepackage{etoolbox}
+
+\usepackage{tikz}
+\usetikzlibrary{automata,arrows,positioning,calc}
+\usepackage{subcaption}
+\usepackage{physics}
+
+
+
+\makeatletter
+\def\@email#1#2{%
+ \endgroup
+ \patchcmd{\titleblock@produce}
+  {\frontmatter@RRAPformat}
+  {\frontmatter@RRAPformat{\produce@RRAP{*#1\href{mailto:#2}{#2}}}\frontmatter@RRAPformat}
+  {}{}
+}%
+\makeatother
+
+\begin{document}
+
+\preprint{AIP/123-QED}
+
+\title[Lit. review: nonequilibrium thermodynamics of ion channels]{Review of literature regarding nonequilibrium thermodynamics in Markovian ion channel modeling}
+\author{Ada Cottam Allen}
+ \email{u1403104@utah.edu.}
+\affiliation{ 
+Physics Department, University of Utah
+}
+
+\date{\today}
+
+\begin{abstract}
+Ion channels in axon membranes are dynamical systems operating far from equilibrium for which steady-state calibration does not capture transient or driven behavior. Additionally, course-grain modeling introduces artifactual behavior characteristic to the model rather than the underlying physical system. Using nonequilibrium and fluctuation thermodynamics to compare behaviors of Markovian models of voltage-gated ion channels is useful because it differentiates detailed energetic behaviors under rapidly fluctuating driving parameters, strengthens standards of rigor for entropy production rate calculations, and reveals potentially artifactual behavior. To this end, this review collects and discusses relevant work in experimental ion channel modeling and theoretical nonequilibrium and fluctuation thermodynamics.
+\end{abstract}
+
+\maketitle
+%%considerations:
+%probably need more background explanation that will ahve ultimately bc this is supposed to be(?) standalone
+%what an ion channel is, what a markov chain is ?
+%^ he says no, don't need it
+
+\section{Introduction}
+The cell membranes of neural axons are covered in protein pores called ion channels that transmit ions through the membrane. The behavior of these ion channels---how they open and close---depends on the voltage across the membrane. This behavior causes rapid depolarization of the cell membrane with the stimulus of an approaching voltage spike and thereby governs the propagation of electric signals along neurons. Experimentally constructed dynamical systems models aim to describe this current propagation behavior. Existing modeling methods are strong but fail to sufficiently consider nonequilibrium behavior. To address this gap, we turn to the tools of nonequilibrium and fluctuation thermodynamics to describe the behavior of models fluctuating rapidly far from equilibrium.
+
+\section{Dynamical systems modeling of ion channels}
+%as a bio system...
+Current propagation through the axon membrane has been studied and characterized for over seven decades. Modeling membrane permeability and, once discovered, ion channels themselves as dynamical systems has proved an effective descriptive method.
+
+%discovered here and whatnot
+\subsection{Past modeling methods}
+%Hodgkin and Huxley model membrane current as a dynamical system
+Hodgkin and Huxley’s foundational neurophysiology paper quantitatively characterizes current through a squid axon membrane. Hodgkin and Huxley model the membrane current as a dynamical system governed by two time-independent rate functions of transmembrane voltage.\cite{HODG1952}
+%maybe put equation for actual transiton rates? not pretty
+This work pioneers the approach of dynamical systems modeling for axon membranes and later for ion channels.
+
+Hodgkin and Huxley's work is seminal to what becomes the field of ion channel modeling. They correctly ascertain that membrane permeability (which defines membrane current) is dependent on transmembrane voltage and is otherwise time-independent. Though the two rate constants Hodgkin and Huxley define refer to particle concentration, and they were unaware of the ion channel structure itself, this forward-backward rate model is essentially the same form as the predominate Markov chain approach used now for membrane current modeling via ion channels.
+
+%fractal models
+Several statistical modeling methods were explored in the decades proceeding Hodgkin and Huxley's work, including fractal\cite{LIEB1987} and exponentiated exponential models.\cite{EAST1978} The relative merit of these methods was the source of no small debate at the time (see Ref.~\onlinecite{LIEB1989,HORN1989}). Ultimately, Markov chain modeling has become the primary modeling method, as it is both strongly predictive and physically intuitive.
+
+\subsection{Current Markov methods}
+%explain what a markov chain is, briefly (how it builds on H+H)
+%experimental methods for model construction
+Markov models are constructed \textit{a posteriori} and calibrated using a voltage-clamp experimental method. The voltage-clamp supplies a constant transmembrane voltage to a patch of ion channels. Time is supplied for the ensemble of channels to reach a dynamic steady state, and the resulting current across the patch is measured.
+
+With the use of constant voltage protocols via voltage-clamp methods, ``the transition rates become time independent as the voltage is kept constant throughout the time course of the study'' which allows modelers ``to study the current-voltage relationship of the voltage gated sodium channel.''\cite{PAL2016} Such time-independent analysis enables fine-tuning of transition rate parameters in Markov models to strongly match steady state behavior.
+
+%list a few other sources as examples of ss calibration
+%use of steady state thermodynamics for model verification
+%model application (P+G)
+Markovian ion channel models can be used in the medical sciences for theoretical examination of the effect of channel-modulating drugs on ion transmission or for the modeling of channelopathic disease.\cite{PAL2016}
+
+\subsection{Potential gaps in modeling}
+%multiple models
+Multiple models exist for the same systems. Models vary in size (number of states) and structure (allowed transitions). These models all match steady state current behavior and cursory thermodynamic constraints (decaying entropy production in steady state), but potentially differ in transient current and detailed thermodynamic behavior. These differences must be explored to consider their impact on predictions from model application. What behavior implied by a model is only artifactual to the model, rather than characteristic to the underlying physical system? More detailed characterization and comparison of the detailed transient current and thermodynamic behavior is needed to uncover these artifacts.
+
+%driven systems (H+H)
+In addition to action potential spike characterization, Hodgkin and Huxley also characterize some specific behavior of membrane current transmission under repeated driving. Voltage-clamp driving reveals a ``refractory period'' of reduced responsiveness to additional stimulus following an initial stimulus and response. This observation identifies a variation in behavior of axon membranes that occurs under rapid driving. Because the physical systems that Markov models are trying to describe have observably different behavior under this driving, it is important to consider how constructed models behave under similar conditions. Repeated driving creates nonequilibrium conditions that operate under subtler thermodynamic constraints. If a model intends to recreate this repeated-driving behavior, then the model must be constructed with driven nonequilibrium thermodynamic considerations.
+
+%detailed balance assumption
+Experimentally constructed ion channel models usually force detailed balance while defining transition rate parameters (see Refs. \onlinecite{PAL2016,VAND1991}), which simplifies models for calibration to observed behavior but is not necessarily physically realistic. In fact, small biological systems at the molecular scale often violate detailed balance in nonequilibrium interactions.\cite{REIC2017} Detailed balance violation has significant impacts on thermodynamic behavior, and it complicates model analysis, but tools exist to address it.
+
+%entropic sensitivity to structure (Esposito b)
+Additionally, entropy production estimates are sensitive to model structure. Esposito and Van den Broeck formulate entropy production for a set of processes $\nu$:
+\begin{equation}
+    %epr
+    \dot{S}_i=\sum_{m,m',\nu}{W^{(\nu)}_{m,m'}(\lambda) p_{m'}\ln \frac{W^{(\nu)}_{m,m'}(\lambda) p_{m'}}{W^{(\nu)}_{m',m}(\lambda) p_{m}}}
+    %\dot{S}_i(t)=\sum_{m,m',\nu}{W^{(\nu)}_{m,m'}(\lambda_t) p_{m'}(t)\ln \frac{W^{(\nu)}_{m,m'}(\lambda_t) p_{m'}(t)}{W^{(\nu)}_{m',m}(\lambda_t) p_{m}(t)}}
+    \label{eq:epr}
+\end{equation}
+For a given system, ``[i]f all the relevant processes $v$ causing transitions between states $m$ are not correctly identified (for example, if one only identifies a subclass of these processes) the EP [entropy production] will be underestimated.''\cite{ESPO2010} Entropy production calculations based on a model are estimates for that model only and are dependent on details of the structure of that model. Different model structures will suggest different entropy production rates (EPR), and different entropy-producing paths will have greater or lesser impact on total system EPR. There is also important distinction between infinite-timescale adiabatic behavior and rapid-driving behavior, which experiences increased irreversibility. Thus, more entropy is generated in driven processes. This behavior is most relevant to consider for biological systems that do experience rapidly fluctuating driving parameters. Ion channels in neurons experience rapid and repeated driving, so nonequilibrium entropy production is a necessary quantity to consider in modeling. Detailed entropic behavior must be closely examined when determining model structure to account for both steady state and driven EPR. 
+
+%potential impacts on model application (P+G)
+%how do we compare these sytems?
+
+\section{Nonequilibrium thermodynamics}
+%NE thermo provides tools
+Classic thermodynamic tools relies heavily on assumptions that the system under study is in equilibrium with its thermal environment, and any changes to the system occur quasi-statically, that is, sufficiently slowly for the system to remain in equilibrium throughout the process. However, many systems, including biological systems, experience constant energy flux and driving. These systems, though they may not be changing, are still not in equilibrium. Instead, they are in a nonequilibrium steady state (NESS). Tools for analyzing NESS systems are have been well developed in the past decades.
+
+\subsection{NESS thermodynamics}
+%thermo tools for modeling stochastic systems (Esposito a)
+Esposito and Van den Broeck formulate master equations for stochastic thermodynamics of time-dependent, nonequilibrium systems. Their formulation splits entropy production into two parts, adiabatic and nonadiabatic, each of which follow second-law-like constraints: 
+\begin{subequations}
+\begin{equation}
+    \dot{S}_i\equiv \dot{S}_{a}+\dot{S}_{na} \nonumber\\,
+\end{equation}
+\begin{eqnarray}
+    \dot{S}_a = \sum_{m,m',\nu}{W^{(\nu)}_{m,m'}(\lambda) p_{m'}\ln \frac{W^{(\nu)}_{m,m'}(\lambda) p_{m'}^{st}}{W^{(\nu)}_{m',m}(\lambda) p_{m}}},\\
+    \dot{S}_{na} = \sum_{m,m'}\dot{p}_{m'}\ln \frac{p_{m'}^{st}}{p_{m}}.
+    \label{}
+\end{eqnarray}
+\end{subequations}
+These split equations allow for entropy production computations for systems driven far from equilibrium, and free thermodynamic analysis of nonequilibrium systems from detailed-balance steady-state assumptions.\cite{ESPO2010}
+
+\subsection{Driven systems and fluctuation theorems}
+%fluctuation theorems for NESS driving (R+C)
+As discussed by Jarzynski,\cite{JARZ2011} systems can violate thermodynamic irreversibility on the small scale of, for example, individual particle trajectories. Fluctuation theorems put constraints on the violation that is possible by a single trajectory or ensemble of trajectories. The thermodynamic violations undergone by a biological system are important considerations when modeling the system, particularly in light of biological exploitation of Gibbs free energy, and the violations implied by a model are important characteristics of that model.
+%(see Ref. \onlinecite{} for individual trajectory-scale computation)
+
+Riechers and Crutchfield formulate thermodynamic constraints on dynamical systems driven between nonequilibrium steady states, and with a particular focus on small biological systems. They derive both detailed [individual] and integral [ensemble] fluctuation theorems for systems driven nonadiabatically between nonequilibrium steady states.\cite{REIC2017} These fluctuation theorems inform meaningful analysis of microstate-scale thermodynamic violations.
+
+%detailed balance considerations, fluctuation class (S+C)
+Semaan and Crutchfield extend fluctuation theorem application to systems that both violate detailed balance and operate between nonequilibrium steady states via a trajectory-class fluctuation theorem, which ``relates the forward and reverse probabilities of an arbitrary subset of trajectories […] to the average exponential work within that trajectory class:''\cite{SEMA2022}
+\begin{equation}
+    %
+    \frac{\mathcal{R}_{\mathbf{\mu}_R}(C_R)}{\mathcal{P}_{\mathbf{\mu}_F}(C)}=\langle e^{-(W_{ex}+Q_{hk}-\Delta \mathcal{F}^{nss})}\rangle_C
+    \label{eq:tcft}
+\end{equation}
+The trajectory class fluctuation theorem provides a ``maximally adaptable'' tool for systems where specific trajectories introduce computational complications. The extension in this paper to nonequilibrium steady states allows use on a wider set of systems, with strong generalization with respect to assumptions about energetics, Markov properties, or specific trajectory classes.
+
+%formulations for Q_ex and W_ex (R+C)
+The above Riechers and Crutchfield paper also discusses the physical interpretations of mathematical thermodynamic quantities in the context of biological dynamical systems. The paper thus describes two nonequilibrium thermodynamic quantities, excess heat and excess work: ``The energy---$Q_\mathrm{ex}$ that a system loses as excess heat can be interpreted as the heat dissipated due to relaxation during transitions between NESSs. Similarly, the excess work $W_\mathrm{ex}$ can be interpreted as the energy that would be dissipated if the system is allowed to relax back to a NESS.'' Meaningful physical interpretation of otherwise abstract mathematical quantities encourages intuitive analysis of nonequilibrium thermodynamic behavior.
+
+To impactfully communicate across disciplines of science, tools must be explained intuitively. Thermodynamics in general and statistical and nonequilibrium thermodynamics in particular are fraught with hard-to-visualize quantities and relations. For useful application and integration into neurophysiology and biophysical modeling, relevant thermodynamic quantities must be conceptualized in an accessible way to non-thermodynamicists. Riechers and Crutchfield do so in a concise and precise way, which aids in the use of these quantities for model analysis.
+
+\section{Existing application}
+%P+G as example:
+%SS conditions for transition parameter fine-tuning
+%driven conditions for specific path and structure optimization
+An article by Pal and Gangopadhyay in Channels proposes a Markovian sodium channel model constructed considering inactivation behavior under both steady-state and dynamic driving protocols for application in drug effect modeling. As discussed above, the authors use NESS dynamics fine tune transition rate parameters. Additionally, they use entropy production with repeated dynamic driving to characterize the likeliest inactivation path. The driving parameter used is a pulse train protocol, a series of square pulses that ``replicates the real biological situation where sodium channel responds to a repetitive stimulus.'' Pal and Gangopadhyay use EPR congruous with the Esposito-Van den Broeck formulation and determine two proposed inactivation paths are each optimal in different nonequilibrium regimes.\cite{PAL2016}
+
+%S+C methods for comparing adaptive energetics
+Semaan and Crutchfield use excess heat and work to compare two Markov ion channel models have otherwise disparate thermodynamic behavior. The authors remove divergent housekeeping heat from the comparison and instead focuses on the adaptive energetic quantities of excess heat and excess work in response to a dynamic driving protocol. This method facilitates meaningful comparison of adaptive energetics of two models with different detailed-balance behavior. For models that violate detailed balance, housekeeping heat---and therefore total heat dissipated---is divergent, which makes meaningful comparison difficult. Instead, analysis of excess heat and work removes the problematic divergence of housekeeping heat and reveals adaptive behavior as the system responds to driving. This adaptive behavior can be compared between models. In this paper, one model maintains detailed balance, and the other violates it. Comparison of adaptive energetic behavior reveals more subtle differences in thermodynamic profile between these two models. Semaan and Crutchfield also model individual ion channel trajectories, revealing a difference in second-law violation patterns between the detailed balance maintaining and violating models.
+
+\section{Conclusion}
+Markovian modeling of ion channels is a strong descriptive method, but model construction fails to sufficiently consider important realistic nonequilibrium behavior. Nonequilibrium thermodynamics provides tools for this analysis, and these tools are beginning to be explored in model construction and analysis. More work is needed to explore methods of application of nonequilibrium modeling and thermodynamic analysis---building on Pal-Gangopadhyay and Semaan-Crutchfield's methods to include repeated dynamic driving protocols and a variety of thermodynamic quantities---and to apply these methods to existing models to identify meaningful differences and evaluate relative validity.
+
+\nocite{*}
+\bibliography{main}
+
+\end{document}
