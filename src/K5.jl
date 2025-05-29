@@ -27,5 +27,7 @@ returns:
 an,bn--tuple of floats, two parameters needed for gk()
 """
 function param(alpha) #returns parameters for k+ model
-    return ((alpha+55e-3)/100e-3)/(1-exp(-(alpha+55e-3)/10e-3)),1/8*exp(-(alpha+65e-3)/80e-3)
+    an = ((alpha+55)/100)/(1-exp(-(alpha+55)/10))
+    bn = 1/8*exp(-(alpha+65)/80)
+    return an,bn
     end
