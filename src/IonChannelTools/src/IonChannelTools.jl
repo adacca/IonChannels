@@ -31,6 +31,20 @@ function evolvedist(G,L,dt,mu0=steadystate(G,L[1]))
     end
 
 """
+	quick_evolve(G,t,mu0)
+
+Compute state distribution directly for time-indep. transition rate matrix
+
+# Arguments
+- `G`: transition rate matrix
+- `t`: time to evolve in ms
+- `mu0`: initial state distribution as row vector
+"""
+function quick_evolve(G,t,mu0)
+    return mu0*exp(t*G) #form of solution verified from class notes from freshman ODE course
+end
+
+"""
 	steadystate(G,alpha)
     steadystate(G::Array)
 
@@ -234,6 +248,27 @@ function S_array(S_x,Gmatrix,L,dists)
         append!(S, S_x(Gmatrix(L[i]),dists[i,:]))
     end
     return S
+end
+
+"""
+	I_avg(V,V_0,mu,open)
+
+Computes <I> for list of distributions (actually I/open channel conductance but whatever)
+
+# Arguments
+- `V`: matrix of driving voltage values in mV corresponding to mu
+- `V_0`: membrane rest potential in mV, usually 90mV for Na+ and -80mV for K+
+- `mu`: matrix of state distributions
+- `open`: row vector indicating open state. ex: [0 0 0 1] for [closed closed closed open]
+
+returns array of I values
+"""
+function I_avg(V,V_0,mu,open)
+    I = Array{Float64}(undef,0,1)
+    for i in 1:size(V,1)
+        I = [I; (V[i]-V_0)*open*mu[i,:]] #vector mult swapped bc mu default is column
+    end
+    return I
 end
 
 """

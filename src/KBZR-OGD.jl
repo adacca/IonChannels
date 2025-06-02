@@ -11,7 +11,7 @@ returns:
 """ 
 function Gmatrix(alpha)
     a2,ai,b2,bi = param(alpha) #param as f(alpha)
-    Kf,Kb = (2.172,1.077)
+    Kf,Kb = (0.0176,0.684)
     # C2 C3 O I
     return [-Kf   Kf     0      0 ;
              Kb -(Kb+a2) a2     0 ;
