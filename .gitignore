@@ -8,6 +8,7 @@
 #/plots
 #/notebooks
 /notebooks/.ipynb_checkpoints
+/notebooks/dont-git
 #/_research
 
 ################################################################################
