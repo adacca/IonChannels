@@ -2,7 +2,6 @@
 # git config --global core.attributesfile ~/git-global/.gitattributes_global
 #
 # Use this file on every device where git development is done.
-
 ###
 ### Auto detect text files and perform LF normalization
 # http://davidlaing.com/2012/09/19/customise-your-gitattributes-to-become-a-git-ninja/
@@ -172,5 +171,4 @@ bin/	binary
 *.Rdx       binary
 *.Rmd		text
 *.R text
-      
 *.ipynb filter=lfs diff=lfs merge=lfs -text
