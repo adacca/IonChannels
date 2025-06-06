@@ -18,7 +18,8 @@ function Gmatrix(alpha)
              0    Kb   -(Kb+a2+a2)   a2     a2 ;
              0    0      b2     -(b2+ai) ai;
              0    0      phi        bi    -(phi+bi)]
-    end
+end
+
 """
 	param(alpha)
 
@@ -39,4 +40,4 @@ function param(alpha) #returns parameters for k+ model
     bi = 0.439(4.5/Kcon)*exp(-0.02352(alpha+25))
     phi = bi*b2/ai
     return a1,a2,ai,b1,b2,bi,phi
-    end
+end
