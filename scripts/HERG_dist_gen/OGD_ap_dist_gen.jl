@@ -27,7 +27,8 @@ include(srcdir(model*".jl"))
 tmax = 200 #time d
 dt = 1e-3 #timestep in ms
 prot_name = "ap" #name of protocol as str for file labeling
-tL = IonChannelTools.spike(tmax,dt,"rs")
+tL = [IonChannelTools.cardiacAP_Bett(dt);IonChannelTools.cardiacAP_Bett(1e-3);IonChannelTools.cardiacAP_Bett(1e-3)]
+tL[:,1] = collect(0:dt:900+dt*2)
 
 #distributions: actual and steady state (INPUT UNCEdSESSARY)
 dists = IonChannelTools.evolvedist(Gmatrix,tL[:,2],dt) #distributions over protocol

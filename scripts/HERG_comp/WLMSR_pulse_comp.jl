@@ -25,7 +25,7 @@ include(srcdir(dict["model"]*".jl"))
 #user analysis
 Q_ex = IonChannelTools.Qex(dict["dists"],dict["steadystates"],dict["dt"])
 H = []
-for i in length(dict["dists"][:,1])
+for i in 1:length(dict["dists"][:,1])
     append!(H, IonChannelTools.H(dict["dists"][i,:]))
 end
 S = IonChannelTools.S_array(IonChannelTools.S_tot,Gmatrix,dict["tL"][:,2],dict["dists"])

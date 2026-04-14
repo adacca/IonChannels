@@ -14,7 +14,7 @@ using IonChannelTools, DataFrames, JLD2
 # - dest_dir: destination in "/data/", default 
 
 #retrieving data
-source_file = "model=KBZR-CR_prot_name=pulse_dt=0.001_P1=-20.jld2" #name of file to be loaded (path not needed, extension needed)
+source_file = "model=KBZR-CR_prot_name=pulse_dt=0.001_P1=20.jld2" #name of file to be loaded (path not needed, extension needed)
 #source_file = "model=KBZR-CR_prot_name=pulse_dt=0.001_P1=0.jld2" 
 #source_file = "model=KBZR-CR_prot_name=pulse_dt=0.001_P1=20.jld2" 
 source_dir = "distributions/HERG_dist" #source folder in /data
@@ -25,7 +25,7 @@ include(srcdir(dict["model"]*".jl"))
 #user analysis
 Q_ex = IonChannelTools.Qex(dict["dists"],dict["steadystates"],dict["dt"])
 H = []
-for i in length(dict["dists"][:,1])
+for i in 1:length(dict["dists"][:,1])
     append!(H, IonChannelTools.H(dict["dists"][i,:]))
 end
 

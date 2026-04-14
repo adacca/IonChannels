@@ -23,17 +23,19 @@ include(srcdir(dict["model"]*".jl"))
 #user analysis
 Q_ex = IonChannelTools.Qex(dict["dists"],dict["steadystates"],dict["dt"])
 H = []
-for i in length(dict["dists"][:,1])
+for i in 1:length(dict["dists"][:,1])
     append!(H, IonChannelTools.H(dict["dists"][i,:]))
 end
-I = IonChannelTools.I_avg(dict["tL"][:,2],-80,dict["dists"],[0 0 0 1])
+I = IonChannelTools.I_avg(dict["tL"][:,2],-84.3,dict["dists"],[0 0 1 0])
 
-S = IonChannelTools.S_array(IonChannelTools.S_tot,Gmatrix,dict["tL"][:,2],dict["dists"])
+Stot = IonChannelTools.S_array(IonChannelTools.S_tot,Gmatrix,dict["tL"][:,2],dict["dists"])
+Ssys = IonChannelTools.S_array(IonChannelTools.S_sys,Gmatrix,dict["tL"][:,2],dict["dists"])
+Smed = IonChannelTools.S_array(IonChannelTools.S_med,Gmatrix,dict["tL"][:,2],dict["dists"])
 tL = dict["tL"]
 
 #saving data (OPT INPUT: destination)
 dest_dir = "computations/HERG_comp" #name of destination directory in "/data/"
-d = @strdict tL Q_ex I S #prepare these values to save
+d = @strdict tL Q_ex I Stot Ssys Smed H #prepare these values to save
 #merge(dict,d)
 new_name = replace(source_file, r".jld2$"=>"_comp.jld2") #new name for file (removes previous extension)
 @tagsave(datadir(dest_dir, new_name), d; storepatch=true)

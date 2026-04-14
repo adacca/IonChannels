@@ -1,0 +1,57 @@
+using DrWatson
+@quickactivate "IonChannels"
+
+using IonChannelTools, DataFrames, JLD2
+
+#Imports dataframe of distributions from /data/. User can perform desired computations. Saves computed values back to /data/.
+
+#MAKE A COPY OF THIS FILE AND INPUT DATAFRAME AND EXPORT INFORMATION AS NECESSARY
+
+#USER INPUTS
+# 
+# OPTIONAL
+# - source_dir: location in "/data/" of raw dataframe, default is "distributions"
+# - dest_dir: destination in "/data/", default 
+
+#retrieving data
+source_file = "model=KBZR-WLMSR_prot_name=ap_dt=0.001.jld2" #name of file to be loaded (path not needed, extension needed)
+source_dir = "distributions/HERG_dist" #source folder in /data
+dict = load(datadir(source_dir, source_file))
+#dict keys: ["tL", "model", "dt", "dists", "gitpatch", "gitcommit", "tbound", "script", "steadystates", "prot_fxn", "prot_name", "Largs"]
+include(srcdir(dict["model"]*".jl"))
+
+println("p1 -20 H")
+println(IonChannelTools.H(IonChannelTools.steadystate(Gmatrix,-20)))
+println()
+println("p1 0 H")
+println(IonChannelTools.H(IonChannelTools.steadystate(Gmatrix,0)))
+println()
+println("p1 20 H")
+println(IonChannelTools.H(IonChannelTools.steadystate(Gmatrix,20)))
+println()
+println("p1 -60 H")
+println(IonChannelTools.H(IonChannelTools.steadystate(Gmatrix,-40)))
+println()
+
+"""
+#user analysis
+Q_ex = IonChannelTools.Qex(dict["dists"],dict["steadystates"],dict["dt"])
+H = []
+for i in 1:length(dict["dists"][:,1])
+    append!(H, IonChannelTools.H(dict["dists"][i,:]))
+end
+I = IonChannelTools.I_avg(dict["tL"][:,2],-84.3,dict["dists"],[0 0 0 1 0])
+
+Stot = IonChannelTools.S_array(IonChannelTools.S_tot,Gmatrix,dict["tL"][:,2],dict["dists"])
+Ssys = IonChannelTools.S_array(IonChannelTools.S_sys,Gmatrix,dict["tL"][:,2],dict["dists"])
+Smed = IonChannelTools.S_array(IonChannelTools.S_med,Gmatrix,dict["tL"][:,2],dict["dists"])
+
+tL = dict["tL"]
+#saving data (OPT INPUT: destination)
+dest_dir = "computations/HERG_comp" #name of destination directory in "/data/"
+d = @strdict tL Q_ex I Stot Ssys Smed H #prepare these values to save
+#merge(dict,d)
+new_name = replace(source_file, r".jld2$"=>"_comp.jld2") #new name for file (removes previous extension)
+@tagsave(datadir(dest_dir, new_name), d; storepatch=true)
+print("Distributions saved to /data/"*dest_dir*"/"*new_name*"\n")
+"""

@@ -417,4 +417,70 @@ function spike(tmax,dt,args="rs",)
     return [t v] #returns in mV
 end
 
+
+"""
+    cardiacAP_Thong(dt)
+
+Generate array of cardiac action potential voltage in mV. From "An Introduction to the Cardiac Action Potentials," Thong et al 2019 via Desmos.
+
+#Arguments
+- 'dt': time step in ms
+
+Returns array [time, voltage]
+"""
+function cardiacAP_Thong(dt)
+    #cardiac action potential from Thong et al 2019 via desmos
+    
+    t = collect(0:dt:300)
+    v = copy(t)
+    for i in 1:length(t)
+        if t[i]<=21.774
+        	v[i] = 0.00000197816 * (t[i] + -4.93853)^6 + -78.72195
+        elseif t[i]<= 30.370
+        	v[i] = -0.00250000002 * t[i]^6 + 0.411538465 * t[i]^5 + -28.201763 * t[i]^4 + 1029.81245 * t[i]^3 + -21134.7788 * t[i]^2 + 231152.323 * t[i] + -1052614.96
+        elseif t[i]<=235.376
+        	v[i] = -1.64867e-14 * t[i]^7 + 4.84032e-9 * t[i]^5 + -0.00000169674* t[i]^4 + 0.000224043 * t[i]^3 + -0.0106748 * t[i]^2 + -0.28873 * t[i] + 59.8825
+        else
+        	v[i] = 0.00000637392 * t[i]^4 + -0.007216009 * t[i]^3 + 3.060937 * t[i]^2 + -576.62622 * t[i] + 40628.3859
+        end
+    end
+
+    tL = [t v] #make sure this concatanates the right direction
+    return tL
+end
+
+"""
+    cardiacAP_Bett(dt)
+
+Generate array of cardiac action potential voltage in mV. From Bett et al 2011
+
+#Arguments
+- 'dt': time step in ms
+
+Returns array [time, voltage]
+"""
+function cardiacAP_Bett(dt)
+    
+    t = collect(0:dt:300)
+    v = copy(t)
+    for i in 1:length(t)
+        if t[i]<=25
+        	v[i] = -78.5
+        elseif t[i]<= 29
+        	v[i] = 30.875 * (t[i]-29) + 45
+        elseif t[i]<= 48.594
+        	v[i] = 0.0000259281 * t[i]^5 + -0.00524888 * t[i]^4 + 0.415391 * t[i]^3 + -16.02759 * t[i]^2 + 300.99021 * t[i] + -2154.87947
+	elseif t[i]<= 185.497
+		v[i] = -4.97843e-10 * t[i]^6 + 3.15161e-7 * t[i]^5 + -0.0000804623 * t[i]^4 + 0.0105676 * t[i]^3 + -0.752914 * t[i]^2 + 27.26885 * t[i] + -342.85589
+	elseif t[i]<= 200.995
+		v[i] = 0.0003733333 * t[i]^4 + -0.294 * t[i]^3 + 86.80067 * t[i]^2 + -11387.14 * t[i] + 559990.6
+        else
+        	v[i] = -77.6
+        end
+    end
+
+    tL = [t v] #make sure this concatanates the right direction
+    return tL
+end
+
 end # module IonChannelTools

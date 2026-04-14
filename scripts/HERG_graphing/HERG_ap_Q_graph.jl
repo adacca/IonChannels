@@ -35,13 +35,14 @@ OGD = load(datadir(source_dir, source_file))
 
 #user analysis
 using Plots
-plt1 = plot(legend=:topleft,xaxis="time [ms]",yaxis="Excess heat dissipation [1/kBT]",size=(400,400))
+plt1 = plot(legend=:topleft,xaxis="time [ms]",yaxis="Heat dissipation [kBT]",dpi=200)#,size=(400,400))
+#plt1 = plot!(twinx(),CR["tL"][:,1],CR["tL"][:,2],linestyle=:dash,linecolor=:grey,ylabel="Transmembrane voltage [mV]",label=:none)#,xlims=(0,250))
+plt1 = plot!(CR["tL"][:,1],CR["Q_ex"],label="CR",color=:black,linestyle=:dot)#xlims=(0,250),ylims=(-1,20),
+plt1 = plot!(MGWMN["tL"][:,1],MGWMN["Q_ex"],label="MGWMN",color=:black,linestyle=:dash)
+plt1 = plot!(WLMSR["tL"][:,1],WLMSR["Q_ex"],label="WLMSR",color=:black,linestyle=:dashdotdot)
+plt1 = plot!(OGD["tL"][:,1],OGD["Q_ex"],label="OGD",color=:black,linestyle=:solid)
+plt1 = plot!(title="",titlelocation=:left) #should be size in mm
 plt1 = plot!(twinx(),CR["tL"][:,1],CR["tL"][:,2],linestyle=:dash,linecolor=:grey,ylabel="Transmembrane voltage [mV]",label=:none)
-plt1 = plot!(CR["tL"][:,1],CR["Q_ex"],label="CR")
-plt1 = plot!(MGWMN["tL"][:,1],MGWMN["Q_ex"],label="MGWMN")
-plt1 = plot!(WLMSR["tL"][:,1],WLMSR["Q_ex"],label="WLMSR")
-plt1 = plot!(OGD["tL"][:,1],OGD["Q_ex"],label="OGD")
-plt1 = plot!(title="A",titlelocation=:left) #should be size in mm
 
 #display(plt1)
 #readline()
