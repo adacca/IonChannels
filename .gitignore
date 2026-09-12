@@ -37,6 +37,10 @@ deps/src/
 docs/build/
 docs/site/
 
+# Untrack Manifest.toml, since these should be built locally from Project.toml
+Manifest.toml
+*/Manifest.toml
+
 ################################################################################
 #                               Jupyter Notebook                               #
 ################################################################################
